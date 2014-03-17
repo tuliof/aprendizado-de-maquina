@@ -1,2 +1,1 @@
-#Como calcular outliers:
-- http://www.wikihow.com/Calculate-Outliers
+[Como calcular outliers](http://www.wikihow.com/Calculate-Outliers)
