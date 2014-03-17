@@ -1,0 +1,24 @@
+Exercício 1
+
+ATENCAO - havia um dado mal formado no arquivo dados1.csv - esse dado esta corrigido na nova versao do arquivo (12/3 11h)
+
+Data de entrega 18/3 em aula.
+
+Entrega até 20/3 implica em penalidade de 50% (a nota será dividida por 2). A tarefa não será aceita depois de 20/3 (em aula).
+
+No arquivo dados1.csv cada linha é um dado, e cada coluna, chamadas A,B, C, e D sao os atributos. O arquivo esta no formato genérico de "csv" mas "csv" não é um padrão único!
+
+1 - leia o arquivo o mostre os 5 primeiros dados
+
+2 - indique quais dados tem atributos faltantes. Remova-os
+
+3 - indique quais dados tem atributos que parecem erros ou outliers.Como voce decobriu isso. Remova estes dados.
+
+4 - plote um histograma do atributo A. Use 10 e 30 bins no histograma. Qual parece mais informativo?
+# Recurso: https://www.youtube.com/watch?v=9aDHbRb4Bf8
+
+5 - Calcule e imprima a matriz de covariancia dos dados
+
+6 - Calcule o PCA dos dados. Quantas dimensões do PCA faz sentido manter?
+
+7 - Plote um grafico XY com as duas maiores dimensões do PCA.
