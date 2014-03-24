@@ -11,3 +11,5 @@
 
 
 [Learning and Predicting](http://scipy-lectures.github.io/advanced/scikit-learn/)
+
+[Linux](https://www.edx.org/course/linuxfoundationx/linuxfoundationx-lfs101x-introduction-1621)
