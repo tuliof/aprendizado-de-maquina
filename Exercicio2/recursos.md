@@ -12,4 +12,7 @@
 
 [Learning and Predicting](http://scipy-lectures.github.io/advanced/scikit-learn/)
 
+
+[Intuitive Classification using KNN and Python](http://blog.yhathq.com/posts/classification-using-knn-and-python.html)
+
 [Linux](https://www.edx.org/course/linuxfoundationx/linuxfoundationx-lfs101x-introduction-1621)

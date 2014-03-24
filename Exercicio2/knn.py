@@ -58,7 +58,6 @@ def learn(samples, expected_values):
 	clf = svm.LinearSVC()
 	# Learn from the data
 	clf.fit(samples, expected_values)
-
 	# Return trained
 	return clf
 
@@ -75,13 +74,7 @@ def main():
 	clf = learn(np.array(train_data[0]), np.array(train_data[1]))
 	# PREDICT
 	test_data = read_data(test_folder)
-	predict(clf, np.array(test_data))
-
-	#nbrs = NearestNeighbors(n_neighbors=2, algorithm='ball_tree').fit(X)
-	#distances, indices = nbrs.kneighbors(X)
-
-	#data_class = get_class(filename)
-	#print data_class
+	#predict(clf, np.array(test_data))
 
 if __name__ == "__main__":
 	main()
