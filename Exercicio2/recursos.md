@@ -8,3 +8,6 @@
 [Python strings](http://www.tutorialspoint.com/python/python_strings.htm)
 
 [xps 2 pdf](http://online2pdf.com/)
+
+
+[Learning and Predicting](http://scipy-lectures.github.io/advanced/scikit-learn/)
