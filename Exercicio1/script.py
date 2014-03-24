@@ -30,15 +30,8 @@ def sanitize(matrix):
 	matrix = np.array(ll, dtype=np.float32)
 	return (matrix, removedEntities)
 
-'''
-The median of a data set is the data point above 
-which half of  the data sits and below which half 
-of the data sits - essentially, it's the "middle" 
-point in a data set.
-'''
 def calculateMedian(arr):
 	arr.sort()
-	minor_modifier = 1.5
 	major_modifier = 3
 	
 	q1 = 0
@@ -64,16 +57,10 @@ def calculateMedian(arr):
 	resultDict['q3'] = q3
 
 	inter_range = q3 - q1
-	# Inner fence
-	# If the point falls outside the inner fence, it is a minor outlier
-	resultDict['inner_min'] = q1 - inter_range * minor_modifier
-	resultDict['inner_max'] = q3 + inter_range * minor_modifier
-
-	# Outer fence
-	# If the point falls outside the outer fence, it is a MAJOR outlier
+	
+	# Outer fence - If the point falls outside the outer fence, it is a MAJOR outlier
 	resultDict['outer_min'] = q1 - inter_range * major_modifier
 	resultDict['outer_max'] = q3 + inter_range * major_modifier
-	# Return a tuple, for now...
 	return (resultDict['outer_min'], resultDict['outer_max'])
 
 def removeOutliers(matrix):
@@ -124,7 +111,7 @@ def isOutsideLimits(value, tupleLimits):
 def printHistogram(matrix):
 	matrixt = matrix.transpose()
 	# Take column A
-	hist, bins = np.histogram(matrixt[0], bins = 30)
+	hist, bins = np.histogram(matrixt[0], bins = 10)
 
 	# Plot histogram
 	width = 0.7 * (bins[1] - bins[0])
@@ -137,44 +124,51 @@ def covarMatrix(matrix):
 	x = np.cov(matrixt)
 	return x
 
-def calcAndDisplayPCA(matrix):
+def calcAndDisplayPCA(matrix, graphType = '2d'):
 	results = PCA(matrix)
 
 	#this will return an array of variance percentages for each component
-	#results.fracs
-	
+	print '\nVariance percentages: '
+	variance = results.fracs
+	print variance
+
+	print '\nMost variance found in series: '
+	variance.sort()
+	print variance[len(variance) - 1], variance[len(variance) - 2]
+
 	x = []
 	y = []
 	z = []
 	#this will return a 2d array of the data projected into PCA space
-	#results.Y
 	for item in results.Y:
 		x.append(item[0])
 		y.append(item[1])
 		z.append(item[2])
+	
+	if graphType == '3d':
+		showPCA3d(x,y,z)
+	else:
+		showPCA2d(x,y)
 
-	plt.close('all') # close all plotting windows
-	fig1 = plt.figure()
-	ax = Axes3D(fig1) # use the plotting figure to create a Axis3D object.
+def showPCA2d(x, y):
+	plt.close('all')
+	plt.plot(x, y, 'bo')
+	plt.show()
+
+def showPCA3d(x, y, z):
+	plt.close('all')
+	ax = Axes3D(plt.figure())
 	pltData = [x,y,z]
-	ax.scatter(pltData[0], pltData[1], pltData[2], 'bo') # make a scatter plot of blue dots from the data
-
-	# make simple, bare axis lines through space:
-	xAxisLine = ((min(pltData[0]), max(pltData[0])), (0, 0), (0,0)) # 2 points make the x-axis line at the data extrema along x-axis 
-	ax.plot(xAxisLine[0], xAxisLine[1], xAxisLine[2], 'r') # make a red line for the x-axis.
-	
-	yAxisLine = ((0, 0), (min(pltData[1]), max(pltData[1])), (0,0)) # 2 points make the y-axis line at the data extrema along y-axis
-	ax.plot(yAxisLine[0], yAxisLine[1], yAxisLine[2], 'r') # make a red line for the y-axis.
-	
-	zAxisLine = ((0, 0), (0,0), (min(pltData[2]), max(pltData[2]))) # 2 points make the z-axis line at the data extrema along z-axis
-	ax.plot(zAxisLine[0], zAxisLine[1], zAxisLine[2], 'r') # make a red line for the z-axis.
-
-	# label the axes 
-	ax.set_xlabel("x-axis label") 
-	ax.set_ylabel("y-axis label")
-	ax.set_zlabel("y-axis label")
-	ax.set_title("The title of the plot")
-	plt.show() # show the plot
+	ax.scatter(pltData[0], pltData[1], pltData[2], 'bo')
+	# Plot the dots for each axis
+	xAxisLine = ((min(pltData[0]), max(pltData[0])), (0, 0), (0,0))
+	yAxisLine = ((0, 0), (min(pltData[1]), max(pltData[1])), (0,0))
+	zAxisLine = ((0, 0), (0,0), (min(pltData[2]), max(pltData[2])))
+	# Draw axis lines
+	ax.plot(xAxisLine[0], xAxisLine[1], xAxisLine[2], 'r') # X - Red
+	ax.plot(yAxisLine[0], yAxisLine[1], yAxisLine[2], 'g') # Y - Green
+	ax.plot(zAxisLine[0], zAxisLine[1], zAxisLine[2], 'b') # Z - Blue.
+	plt.show()
 
 def doWork():
 	matrix = readCsv('dados1.csv')
@@ -207,6 +201,7 @@ def doWork():
 	print '	A           B           C           D'
 	print covarMatrix(matrix)
 
+	# Can dislay 2D and 3D graphs, optional param graphType = 2d or 3d, default: 2d
 	calcAndDisplayPCA(matrix)
 
 def main():
