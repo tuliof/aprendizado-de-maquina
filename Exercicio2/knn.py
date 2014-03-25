@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import os
 import numpy as np
-from sklearn.neighbors import NearestNeighbors
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn import svm
 
 def read_data(folder_path):
@@ -9,8 +9,8 @@ def read_data(folder_path):
 
 	data = []
 	data_class = []
-
 	files = []
+
 	# Loop all files in the folder
 	for (dirpath, dirnames, filenames) in walk(folder_path):
 		files.extend(filenames)
@@ -24,57 +24,57 @@ def read_data(folder_path):
 		else:
 			data_class.append(get_class(file_metadata[0]))
 			data.append(read_pgm_file(os.path.join(folder_path, f)))
-	#print 'Number of samples: %s' % len(data)
-	#print 'Number of classes: %s' % len(data_class)
+
 	return (data, data_class)
 
 def read_pgm_file(filename):
-	pgm = []
 	with open(filename, 'rb') as f:
 		lines = f.read()
 		# Remove first 3 lines
-		lines = lines[11:]
+		lines = lines[12:]
 		# Remove new lines and split into array
-		lines = lines.replace('\n','').split(' ')
+		lines = lines.replace('\n','').replace('\r','').replace('\'','').split(' ')
 		# Remove last position, it is an empty string
-		lines = lines[:4096]
+		lines = map(int, lines[:4096])
 		
-		for i in xrange(0, len(lines), 64):
-			pgm.append(map(int, lines[i:i+64]))
-
-		return pgm
+		return lines
 		
 def get_class(filename):
-	return os.path.basename(filename).split('.')[0][0]
+	return int(os.path.basename(filename).split('.')[0][0])
 
-def learn(samples, expected_values):
-	'''
-	In scikit-learn, we learn from existing data by creating 
-	an estimator and calling its fit(X, Y) method.
+def predict(train_data, train_data_classes, test_data):
+	results = []
+	for n in range(1, 51, 2):
+		clf = KNeighborsClassifier(n_neighbors=n)
+		# Train
+		clf.fit(train_data, train_data_classes)
+		# Predict
+		preds = clf.predict(test_data)
+		accuracy = np.where(preds==test['high_quality'], 1, 0).sum() / float(len(test_data))
+		print "Neighbors: %d, Accuracy: %3f" % (n, accuracy)
 
-	X -> The samples(Usually a 2d vector)
-	y -> The expected values(Usually a 1d vector)
-	'''
-	clf = svm.LinearSVC()
-	# Learn from the data
-	clf.fit(samples, expected_values)
-	# Return trained
-	return clf
+		results.append([n, accuracy])
 
-def predict(clf, data):
-	print clf.predict(data)
+	results = pd.DataFrame(results, columns=["n", "accuracy"])
+
+	pl.plot(results.n, results.accuracy)
+	pl.title("Accuracy with Increasing K")
+	pl.show()
 
 def main():
 	train_folder = './train17'
 	test_folder = './test17'
 	# Read data from file
-	train_data = read_data(train_folder)
 	
 	# LEARN
-	clf = learn(np.array(train_data[0]), np.array(train_data[1]))
+	train_data = read_data(train_folder)
 	# PREDICT
 	test_data = read_data(test_folder)
-	#predict(clf, np.array(test_data))
+
+	np_test = np.array(test_data[0])
+	np_train = np.array(train_data[0])
+	np_classes = np.array(train_data[1])
+	clf = predict(np_train, np_classes, np_test)
 
 if __name__ == "__main__":
 	main()
