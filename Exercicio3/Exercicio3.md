@@ -1,12 +1,12 @@
 # Exercício 3
-======
 
 Data de entrega 10/4 em aula
 
 Use os dados [Sonar, Mines vs Rocks dataset](http://archive.ics.uci.edu/ml/datasets/Connectionist+Bench+%28Sonar,+Mines+vs.+Rocks%29) do UCI Machine Learning Repository.
 
-Discuta se é preciso normalizar os dados ou não. Se for preciso faça a normalizaçao.
-Faça um PCA para redução da dimensionalidade. Quantas dimensões manter?
+1. Discuta se é preciso normalizar os dados ou não. Se for preciso faça a normalizaçao.
+2. Faça um PCA para redução da dimensionalidade. Quantas dimensões manter?
+
 Voce vai verificar qual dentre os algoritmos abaixo é o melhor para classificar os dados.
 
   * SVM Linear (C de 1e-3 a 1e4 em multiplos de 10)
@@ -33,7 +33,6 @@ reporte a acuracia media entre os a_i
 ```
 
 **ou em python**
-
 ```python
 out=0
 for TR,TE in kfold(DADOS,k):
