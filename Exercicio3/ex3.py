@@ -1,7 +1,22 @@
 #!/usr/bin/env python
 import numpy as np
 
-def extract_data_from_file(filename):
+def read_csv(filename):
+	data = []
+	classes = []
+
+	with open(filename, 'rb') as f:
+		lines = f.readlines()
+
+		for line in lines:
+			arr = line.split(',')
+			obj_class = arr[len(arr)-1:][0].replace('\n','')
+			classes.append(obj_class)
+			data.append(map(float, arr[:len(arr)-1]))
+
+	return (classes, data)
+
+def extract_special_data(filename):
 	test_set = []
 	test_labels = []
 	train_set = []
@@ -42,7 +57,6 @@ def extract_data_from_file(filename):
 					data_list = []
 	return (train_set, train_labels, test_set, test_labels)
 
-
 def apply_pca(matrix):
 	from matplotlib.mlab import PCA
 	results = PCA(matrix)
@@ -56,6 +70,40 @@ def apply_pca(matrix):
 	print variance[len(variance) - 1], variance[len(variance) - 2]
 
 	showPCA2d(results.Y)
+
+def svm_linear(matrix):
+	#SVM Linear (C de 1e-3 a 1e4 em multiplos de 10)
+	print 'ok'
+
+def svm_rbf(matrix):
+	#SVM RBF (C e gamma de 1e-3 a 1e4 em multiplos de 10)
+	print 'ok'
+
+def knn(train_data, train_classes, test_data, test_classes):
+	#K vizinhos (K = 1,3,5,11,21,31)
+	results = []
+	number_of_classes = len(test_data)
+	for n in (1,3,5,11,21,31):
+		print 'Training with range %s' % n
+		# Train
+		clf = KNeighborsClassifier(n_neighbors=n, weights='uniform')
+		clf.fit(train_data, train_classes)
+
+		# Tests
+		for x in range(0, len(test_data)):
+			print 'Trying to predict: %s' % test_classes[x]
+			preds = clf.predict(test_data[x])
+			#print preds
+			preds = np.array(preds.sort())
+			#print np.where(preds==test_classes)
+			accuracy = np.where(preds==np.array(test_classes.sort()), 1, 0).sum() / float(number_of_classes)
+
+			results.append([n, accuracy])
+
+	return results
+
+def random_forrest():
+	print 'ok'
 
 def showPCA2d(pca_Y):
 	x = []
@@ -71,9 +119,11 @@ def showPCA2d(pca_Y):
 	plt.plot(x, y, 'bo')
 	plt.show()
 
-data = extract_data_from_file('sonar.rocks')
+def main():
+	data = read_csv('sonar.all-data')
+	classes = np.array(data[0])
+	objects = np.array(data[1])
+	apply_pca(objects)
 
-arr_train = np.array(data[2], dtype=np.float32).T
-print len(arr_train)
-print len(arr_train)
-apply_pca(arr_train)
+if __name__ == '__main__':
+	main()
