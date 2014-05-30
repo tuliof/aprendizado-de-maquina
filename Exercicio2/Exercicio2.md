@@ -1,4 +1,4 @@
-Exercício 2
+#Exercício 2
 
 Data de entrega 25/3 em aula
 
@@ -40,3 +40,9 @@ pca<- prcomp(treino)
 novotreino<-pca$x[,1:n]
 novoteste<-scale(teste,pca$center,pca$scale)%*%pca$rotation[,1:n]
 A primeira linha calcula o PCA. A segunda retorna os dados de treino convertidos pelo PCA - voces devem ter feito algo parecido no Exercicio 1. A terceira linha usa o PCA dos dados de treino para converter os dados de teste para as mesmas dimensoes tranformadas do dado de treino
+
+|    Name   |   Phone   |
+|-----------|-----------|
+| Anna      | 123456789 |
+| Alexander | 987654321 |
+| _         |           |
